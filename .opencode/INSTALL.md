@@ -6,7 +6,13 @@
 2. 将 `skills/arming-thought/SKILL.md` 作为新会话的起始方法论入口。
 3. 具体任务开始后，再按需读取对应 `skills/*/SKILL.md`。
 4. 如果 OpenCode 支持命令目录，则一并加载 `commands/`；否则直接读取对应命令文件内容。
-5. 在 Windows 上执行：
+5. 优先运行：
+
+```bash
+npx qiushi-skill validate
+```
+
+6. 如果当前环境没有 Node.js，再在 Windows 上执行：
 
 ```powershell
 powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File tests/validate.ps1

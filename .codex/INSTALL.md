@@ -16,7 +16,13 @@
    - `skills/overall-planning/SKILL.md`
    - `skills/workflows/SKILL.md`
 4. 如果宿主支持 Markdown commands，可额外加载 `commands/` 目录作为手动入口；不支持时，直接读取同名命令文件内容即可。
-5. 在 Windows 上运行：
+5. 优先运行：
+
+```bash
+npx qiushi-skill validate
+```
+
+6. 如果当前环境没有 Node.js，再在 Windows 上运行：
 
 ```powershell
 powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File tests/validate.ps1

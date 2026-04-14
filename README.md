@@ -1,8 +1,14 @@
 <p align="center">
-  <img src="assets/logo_main.png" width="400"/>
+  <img src="https://raw.githubusercontent.com/HughYau/qiushi-skill/main/assets/logo_main.png" width="400"/>
 </p>
 
 # 🔴 求是 Skill —— 武装 AI 的大脑
+
+<p align="center">
+  <strong>语言</strong>：
+  <a href="./README.md">简体中文</a> |
+  <a href="./README.en.md">English</a>
+</p>
 
 > 🌟 "我们的同志在困难的时候，要看到成绩，要看到光明，要提高我们的勇气。"
 
@@ -28,7 +34,7 @@
 感谢大家的支持，项目冲上了 **Github 4 月 9 日日榜第七**！
 
 <p align="center">
-   <img src="assets/github0409trend.png" alt="4月9日日榜第七" width="760"/>
+   <img src="https://raw.githubusercontent.com/HughYau/qiushi-skill/main/assets/github0409trend.png" alt="4月9日日榜第七" width="760"/>
 </p>
 
 由于一些不可抗力因素，🧱内出现了限流和封禁，请大家理性传播，保护好自己账号。
@@ -114,30 +120,49 @@ graph TD
 
 ### 系统要求
 
-- **Windows**：默认使用 PowerShell hook，无需额外安装 Bash
-- **macOS / Linux**：需要可用的 `bash` 或 `sh`
-- **验证脚本**：仓库内置 `tests/validate.sh`（macOS/Linux）和 `tests/validate.ps1`（Windows），可用于安装后自检
+- **标准安装器**：`npx qiushi-skill` 需要 Node.js `18.17+`
+- **Windows**：自动注入优先走原生 PowerShell hook，无需额外安装 Bash
+- **macOS / Linux**：仅在直接运行 POSIX hook 或 legacy 验证脚本时需要 `bash` 或 `sh`
+- **推荐验证**：`npx qiushi-skill validate`
+- **兜底验证**：`tests/validate.sh`（macOS/Linux）和 `tests/validate.ps1`（Windows）
 
-### 方式一：环境与插件安装
+### 方式一：`npx qiushi-skill` 一键安装（首推）
 
-#### Claude Code
-
-**方法 A：通过 Claude Plugin Hub 安装（推荐）**
-
-在终端中一键安装：
+默认进入交互式安装：
 
 ```bash
-npx claudepluginhub hughyau/qiushi-skill
+npx qiushi-skill
 ```
 
-或者在 Claude Code 中通过 Marketplace 手动安装：
+也支持非交互式：
 
-1. 添加 Marketplace（只需执行一次）：
-   `/plugin marketplace add https://www.claudepluginhub.com/api/plugins/hughyau-qiushi-skill/marketplace.json`
-2. 安装插件：
-   `/plugin install hughyau-qiushi-skill@cpd-hughyau-qiushi-skill`
+```bash
+npx qiushi-skill install --target claude-code --scope user
+npx qiushi-skill install --target claude-code,cursor --scope project
+npx qiushi-skill uninstall --target claude-code --scope user
+npx qiushi-skill validate
+```
 
-**方法 B：源码克隆安装**
+CLI 会：
+
+- 为 Claude Code / Cursor 复制标准 bundle 到约定插件目录
+- 为 OpenClaw / Hermes / Codex / OpenCode 打印对应平台的标准接入指引
+- 统一调用 Node 版验证逻辑，避免 Bash / PowerShell 双脚本长期漂移
+
+### 方式二：Claude Code 官方 Marketplace 安装
+
+仓库根现已提供 `.claude-plugin/marketplace.json`，可以直接从 GitHub 仓库发现：
+
+```text
+/plugin marketplace add HughYau/qiushi-skill
+/plugin install qiushi-skill@qiushi-skill
+```
+
+这是 `v1.3.0` 起的首选官方链路，不再依赖第三方 marketplace 转发服务。
+
+### 方式三：源码安装与手动接入
+
+#### Claude Code
 
 ```bash
 git clone https://github.com/HughYau/qiushi-skill
@@ -145,37 +170,21 @@ cd qiushi-skill
 claude --plugin-dir .
 ```
 
-`--plugin-dir` 会在当前会话加载插件。如需每次会话都自动加载，可以设置 shell alias：
+如果你只想验证当前仓库是否完整，可直接运行：
 
 ```bash
-# 加入 ~/.bashrc 或 ~/.zshrc
-alias claude='claude --plugin-dir /path/to/qiushi-skill'
+npx qiushi-skill validate
 ```
-
-**macOS / Linux 验证：**
-
-```bash
-bash tests/validate.sh
-```
-
-- hook 入口使用 `hooks/session-start`
-- 请确认系统上有 `bash` 或 `sh`
-
-**Windows 验证：**
-
-```powershell
-powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File tests/validate.ps1
-```
-
-- 从 `1.2.0` 起，SessionStart hook 优先走原生 PowerShell，不再依赖 Git Bash / WSL
-- 如果你的环境禁用了 PowerShell 脚本执行，请使用 `-ExecutionPolicy Bypass` 运行验证脚本确认安装
 
 #### Cursor
 
-1. 克隆仓库到本地
-2. 将项目目录加入 Cursor 的插件路径
-3. 确认 `.cursor-plugin/plugin.json` 已被识别
-4. 使用验证脚本检查 hook 与命令文件是否完整
+可用标准安装器：
+
+```bash
+npx qiushi-skill install --target cursor --scope user
+```
+
+或手动把本仓库作为插件 bundle 放到你的 Cursor 插件目录，并确认 `.cursor-plugin/plugin.json` 可被识别。
 
 #### Codex
 
@@ -183,7 +192,15 @@ powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File tests/validate.ps1
 
 #### OpenCode
 
-参考 [docs/README.opencode.md](docs/README.opencode.md) 或直接让 OpenCode 读取 [.opencode/INSTALL.md](https://raw.githubusercontent.com/HughYau/qiushi-skill/refs/heads/main/.opencode/INSTALL.md)。
+参考 [docs/README.opencode.md](docs/README.opencode.md) 或直接让 OpenCode 读取 [.opencode/INSTALL.md](.opencode/INSTALL.md)。
+
+#### OpenClaw
+
+截至 **2026-04-14**，OpenClaw 官方文档已明确支持把 Claude / Cursor / Codex bundles 映射为原生插件，并支持直接从 GitHub 仓库读取 marketplace。可参考 [docs/README.openclaw.md](docs/README.openclaw.md) 或 [.openclaw/INSTALL.md](.openclaw/INSTALL.md)。
+
+#### Hermes Agent
+
+截至 **2026-04-14**，Hermes Agent 官方文档已提供原生 `skills` 目录与 `hermes skills list` / `--toolsets "skills"` 工作流。推荐参考 [docs/README.hermes.md](docs/README.hermes.md) 或 [.hermes/INSTALL.md](.hermes/INSTALL.md)。
 
 #### 其他平台
 
@@ -193,7 +210,17 @@ powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File tests/validate.ps1
 2. 将各具体 skill 的 `SKILL.md` 作为按需加载的参考文档
 3. 如果支持 Markdown commands，可一并加载 `commands/` 目录
 
-### 方式二：直接贴给 AI agent 安装
+### 方式四：Claude Plugin Hub（备选）
+
+如果你已经在用 Claude Plugin Hub，旧链路仍然可用：
+
+```bash
+npx claudepluginhub hughyau/qiushi-skill
+```
+
+但从 `1.3.0` 起，它不再是主推荐路径。
+
+### 方式五：直接贴给 AI agent 安装
 
 如果你在让 Claude Code、Cursor Agent 或其他终端型 AI 助手代你安装，可以直接粘贴下面这段：
 
@@ -206,25 +233,28 @@ powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File tests/validate.ps1
 2. 进入仓库目录：
    cd qiushi-skill
 
-3. 如果当前环境安装了 Claude Code，执行：
-   claude --plugin-dir .
+3. 如果当前环境有 Node.js 18.17+，优先执行：
+   npx qiushi-skill install --target claude-code --scope user
 
-4. 如果当前环境是 Cursor，请把这个项目目录注册到 Cursor 的插件路径。
+4. 如果当前环境是 Claude Code，也可以走官方链路：
+   /plugin marketplace add HughYau/qiushi-skill
+   /plugin install qiushi-skill@qiushi-skill
 
-5. 安装完成后请检查以下文件是否存在且可读：
-   .claude-plugin/plugin.json
-   .cursor-plugin/plugin.json
-   commands/
-   hooks/hooks.json
-   hooks/session-start.ps1
-   hooks/session-start
+5. 如果当前环境是 Codex / OpenCode / OpenClaw / Hermes，请分别读取：
+   .codex/INSTALL.md
+   .opencode/INSTALL.md
+   .openclaw/INSTALL.md
+   .hermes/INSTALL.md
 
-6. 最后运行验证（macOS/Linux 用 bash，Windows 用 powershell）：
+6. 安装完成后执行：
+   npx qiushi-skill validate
+
+7. 如果没有 Node.js，再退回到仓库内置脚本：
    bash tests/validate.sh
    # 或 Windows：
    powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File tests/validate.ps1
 
-7. 告诉我如何验证安装是否成功。
+8. 告诉我如何验证安装是否成功。
 ```
 
 ## 🚀 使用方式
@@ -257,7 +287,13 @@ powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File tests/validate.ps1
 
 ### 安装验证
 
-macOS / Linux：
+首选：
+
+```bash
+npx qiushi-skill validate
+```
+
+兜底脚本：
 
 ```bash
 bash tests/validate.sh
@@ -271,10 +307,12 @@ powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File tests/validate.ps1
 
 验证脚本会检查：
 - JSON 配置是否有效
+- `.claude-plugin/marketplace.json` 与 `package.json` 版本是否一致
+- CLI 入口与平台安装文档是否存在
 - hook 文件与命令文件是否齐全
 - `SKILL.md` / agent / command 的 frontmatter 是否完整
 - 本地 Markdown 链接和图片路径是否存在
-- Windows hook 的原生 PowerShell 输出是否可解析
+- 平台对应的 hook smoke test 是否可解析
 
 更多平台细节见 [docs/platforms.md](docs/platforms.md)。
 
@@ -301,10 +339,17 @@ powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File tests/validate.ps1
 
 ```
 qiushi-skill/
-├── .claude-plugin/plugin.json        # Claude Code 插件配置
+├── .claude-plugin/
+│   ├── marketplace.json              # Claude Code 原生 marketplace 入口
+│   └── plugin.json                   # Claude Code 插件配置
 ├── .codex/INSTALL.md                 # Codex 安装入口
 ├── .cursor-plugin/plugin.json        # Cursor 插件配置
+├── .hermes/INSTALL.md                # Hermes Agent 安装入口
 ├── .opencode/INSTALL.md              # OpenCode 安装入口
+├── .openclaw/INSTALL.md              # OpenClaw 安装入口
+├── bin/
+│   ├── qiushi-skill.mjs              # npm CLI 主入口
+│   └── lib/                          # detect / install / validate 模块
 ├── commands/                         # 手动 slash commands 入口
 ├── hooks/                            # Session 注入系统
 │   ├── hooks.json
@@ -333,10 +378,13 @@ qiushi-skill/
 ├── docs/
 │   ├── platforms.md
 │   ├── README.codex.md
+│   ├── README.hermes.md
+│   ├── README.openclaw.md
 │   └── README.opencode.md
 ├── package.json
 ├── CHANGELOG.md
 ├── LICENSE
+├── README.en.md
 └── README.md
 ```
 
@@ -351,8 +399,10 @@ qiushi-skill/
 
 ## 🔌 平台支持
 
-- Claude Code：插件安装 + SessionStart 自动注入 + commands
-- Cursor：插件元数据 + commands + 验证脚本
+- Claude Code：官方 marketplace + SessionStart 自动注入 + commands
+- Cursor：插件元数据 + commands + `npx qiushi-skill install`
+- OpenClaw：官方支持 Claude bundle / GitHub marketplace，对接文档见 [docs/README.openclaw.md](docs/README.openclaw.md)
+- Hermes Agent：原生 skills 目录与 CLI 工作流，对接文档见 [docs/README.hermes.md](docs/README.hermes.md)
 - Codex：原生安装入口文档见 [docs/README.codex.md](docs/README.codex.md)
 - OpenCode：原生安装入口文档见 [docs/README.opencode.md](docs/README.opencode.md)
 - 通用：直接复用 `skills/` 与 `commands/`

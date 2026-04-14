@@ -92,6 +92,7 @@ function Test-MarkdownLocalTargets {
 Write-Host "Validating JSON files..."
 $jsonFiles = @(
     (Join-Path $repoRoot ".claude-plugin\plugin.json"),
+    (Join-Path $repoRoot ".claude-plugin\marketplace.json"),
     (Join-Path $repoRoot ".cursor-plugin\plugin.json"),
     (Join-Path $repoRoot "hooks\hooks.json"),
     (Join-Path $repoRoot "package.json")
@@ -104,14 +105,23 @@ foreach ($file in $jsonFiles) {
 
 Write-Host "Validating required files..."
 $requiredFiles = @(
+    "bin\qiushi-skill.mjs",
+    "bin\lib\detect-platform.mjs",
+    "bin\lib\install.mjs",
+    "bin\lib\validate.mjs",
     "hooks\run-hook.cmd",
     "hooks\session-start",
     "hooks\session-start.ps1",
     "skills\arming-thought\SKILL.md",
     ".codex\INSTALL.md",
     ".opencode\INSTALL.md",
+    ".openclaw\INSTALL.md",
+    ".hermes\INSTALL.md",
+    "README.en.md",
     "docs\README.codex.md",
     "docs\README.opencode.md",
+    "docs\README.openclaw.md",
+    "docs\README.hermes.md",
     "docs\platforms.md"
 ) | ForEach-Object { Join-Path $repoRoot $_ }
 
@@ -151,8 +161,11 @@ foreach ($command in $expectedCommands) {
 Write-Host "Validating markdown links..."
 $markdownFiles = @(
     (Join-Path $repoRoot "README.md"),
+    (Join-Path $repoRoot "README.en.md"),
     (Join-Path $repoRoot "docs\README.codex.md"),
     (Join-Path $repoRoot "docs\README.opencode.md"),
+    (Join-Path $repoRoot "docs\README.openclaw.md"),
+    (Join-Path $repoRoot "docs\README.hermes.md"),
     (Join-Path $repoRoot "docs\platforms.md")
 )
 

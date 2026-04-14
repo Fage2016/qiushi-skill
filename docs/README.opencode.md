@@ -17,7 +17,13 @@
 
 ## 验证
 
-Windows：
+优先执行：
+
+```bash
+npx qiushi-skill validate
+```
+
+如果当前环境没有 Node.js，再在 Windows 上执行：
 
 ```powershell
 powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File tests/validate.ps1

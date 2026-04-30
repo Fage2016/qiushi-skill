@@ -26,23 +26,16 @@ const REQUIRED_FILES = [
   ".nanobot/INSTALL.md",
   "README.md",
   "README.en.md",
-  "docs/README.codex.md",
-  "docs/README.opencode.md",
-  "docs/README.openclaw.md",
-  "docs/README.hermes.md",
-  "docs/README.nanobot.md",
-  "docs/platforms.md",
 ];
 
 const MARKDOWN_FILES = [
   "README.md",
   "README.en.md",
-  "docs/README.codex.md",
-  "docs/README.opencode.md",
-  "docs/README.openclaw.md",
-  "docs/README.hermes.md",
-  "docs/README.nanobot.md",
-  "docs/platforms.md",
+  ".codex/INSTALL.md",
+  ".opencode/INSTALL.md",
+  ".openclaw/INSTALL.md",
+  ".hermes/INSTALL.md",
+  ".nanobot/INSTALL.md",
 ];
 
 const COMMANDS = [
